@@ -39,6 +39,16 @@ class StateObject(serializable.Serializable):
                 state[attr] = val.get_state()
             elif _is_list(cls):
                 state[attr] = [x.get_state() for x in val]
+            elif isinstance(val, dict):
+                s = []
+                for k, v in val.items():
+                    if not isinstance(k, str):
+                        raise ValueError("key must be str to be serializable, '{}' is {}".format(k, s.__class__))
+                    v_state = v
+                    if hasattr(v, "get_state"):
+                        v_state = v.get_state()
+                    s.append((k, v_state))
+                state[attr] = s
             else:
                 state[attr] = val
         return state

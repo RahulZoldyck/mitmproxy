@@ -53,7 +53,9 @@ class WebSocketFlow(flow.Flow):
         close_code=str,
         close_message=str,
         close_reason=str,
-        handshake_flow=HTTPFlow,
+        # Do not include handshake_flow, to prevent recursive serialization!
+        # Since mitmproxy-console currently only displays HTTPFlows,
+        # dumping the handshake_flow will include the WebSocketFlow too.
     )
 
     @classmethod
